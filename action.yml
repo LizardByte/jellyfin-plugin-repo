@@ -17,7 +17,7 @@ inputs:
   release_tag:
     description: "The tag name of the release."
     default: "latest"
-    required: true
+    required: false
   repository:
     description: "The repository where gh-pages is hosted."
     default: "LizardByte/jellyfin-plugin-repo"
