@@ -49,9 +49,12 @@ runs:
         repository=${{ inputs.repository }}
         release_tag=${{ inputs.release_tag }}
 
+        # the repository running this action
+        source_repository=${{ github.event.repository.name }}
+
         if [ -z "${{ inputs.zipfile }}" ]; then
           # repository name in lowercase
-          repository_name=$(echo ${{ github.event.repository.name }} | tr '[:upper:]' '[:lower:]')
+          repository_name=$(echo ${source_repository} | tr '[:upper:]' '[:lower:]')
           zipfile_name=${repository_name}.zip
           zipfile_path=${{ github.workspace }}/${repository_name}.zip
         else
@@ -69,6 +72,8 @@ runs:
         echo "gh_pages_url=${gh_pages_url}" >> $GITHUB_OUTPUT
         echo "repository=${repository}" >> $GITHUB_OUTPUT
         echo "release_tag=${release_tag}" >> $GITHUB_OUTPUT
+
+        echo "source_repository=${source_repository}" >> $GITHUB_OUTPUT
 
         echo "plugin_url=${plugin_url}" >> $GITHUB_OUTPUT
         echo "zipfile_name=${zipfile_name}" >> $GITHUB_OUTPUT
@@ -124,5 +129,5 @@ runs:
         directory: ${{ steps.inputs.outputs.branch }}
         branch: ${{ steps.inputs.outputs.branch }}
         force: false
-        message: "Bump ${{ steps.inputs.outputs.repository }} to ${{ steps.inputs.outputs.release_tag }}"
+        message: "Bump ${{ steps.inputs.outputs.source_repository }} to ${{ steps.inputs.outputs.release_tag }}"
         repository: ${{ steps.inputs.outputs.repository }}
