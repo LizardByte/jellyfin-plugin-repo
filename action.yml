@@ -3,6 +3,12 @@ name: "Jellyfin manifest manager"
 description: "Update a Jellyfin manifest file in a GitHub repository, and publish to gh-pages."
 author: "LizardByte"
 inputs:
+  committer_email:
+    description: "The email address of the committer to the gh-pages branch."
+    required: true
+  committer_name:
+    description: "The name of the committer to the gh-pages branch."
+    required: true
   branch:
     description: "The branch where gh-pages is hosted."
     default: "gh-pages"
@@ -49,24 +55,24 @@ runs:
           zipfile_name=${repository_name}.zip
           zipfile_path=${{ github.workspace }}/${repository_name}.zip
         else
-          echo "zipfile_name=$(basename ${{ inputs.zipfile }})" >> $GITHUB_OUTPUT
-          echo "zipfile_path=${{ inputs.zipfile }}" >> $GITHUB_OUTPUT
+          zipfile_name=$(basename ${{ inputs.zipfile }})
+          zipfile_path=${{ inputs.zipfile }}
         fi
 
         if [ -z "${{ inputs.plugin-url }}" ]; then
-          plugin_url=${{ github.event.repository.html_url }}/releases/download/${{ release_tag }}/${zipfile_name}
+          plugin_url=${{ github.event.repository.html_url }}/releases/download/${release_tag}/${zipfile_name}
         else
           plugin_url=${{ inputs.plugin_url }}
         fi
 
-        echo "branch=${{ branch }}" >> $GITHUB_OUTPUT
-        echo "gh_pages_url=${{ gh_pages_url }}" >> $GITHUB_OUTPUT
-        echo "repository=${{ repository }}" >> $GITHUB_OUTPUT
-        echo "release_tag=${{ release_tag }}" >> $GITHUB_OUTPUT
+        echo "branch=${branch}" >> $GITHUB_OUTPUT
+        echo "gh_pages_url=${gh_pages_url}" >> $GITHUB_OUTPUT
+        echo "repository=${repository}" >> $GITHUB_OUTPUT
+        echo "release_tag=${release_tag}" >> $GITHUB_OUTPUT
 
-        echo "plugin_url=${{ plugin_url }}" >> $GITHUB_OUTPUT
-        echo "zipfile_name=${zipfile_name}.zip" >> $GITHUB_OUTPUT
-        echo "zipfile_path=${zipfile_path}.zip" >> $GITHUB_OUTPUT
+        echo "plugin_url=${plugin_url}" >> $GITHUB_OUTPUT
+        echo "zipfile_name=${zipfile_name}" >> $GITHUB_OUTPUT
+        echo "zipfile_path=${zipfile_path}" >> $GITHUB_OUTPUT
 
     - name: Setup Python
       id: setup-python
@@ -88,6 +94,8 @@ runs:
         ref: ${{ steps.inputs.outputs.branch }}
         repository: ${{ steps.inputs.outputs.repository }}
         path: ${{ steps.inputs.outputs.branch }}
+        persist-credentials: false  # otherwise, the token used is the GITHUB_TOKEN, instead of the personal token
+        fetch-depth: 0  # otherwise, will fail to push refs to dest repo
 
     - name: JPRM repo init/add
       shell: bash
@@ -111,7 +119,10 @@ runs:
       uses: actions-js/push@v1.4
       with:
         github_token: ${{ inputs.github_token }}
+        author_email: ${{ inputs.committer_email }}
+        author_name: ${{ inputs.committer_name }}
         directory: ${{ steps.inputs.outputs.branch }}
         branch: ${{ steps.inputs.outputs.branch }}
         force: false
         message: "Bump ${{ steps.inputs.outputs.repository }} to ${{ steps.inputs.outputs.release_tag }}"
+        repository: ${{ steps.inputs.outputs.repository }}
