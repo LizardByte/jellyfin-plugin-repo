@@ -10,6 +10,14 @@
         "imageUrl": "https://lizardbyte.github.io/jellyfin-plugin-repo/themerr/themerr-jellyfin.png",
         "versions": [
             {
+                "version": "2024.113.1544.53",
+                "changelog": "see LizardByte/Themerr-jellyfin on GitHub",
+                "targetAbi": "10.8.13.0",
+                "sourceUrl": "https://github.com/LizardByte/Themerr-jellyfin/releases/download/v2024.113.1544.53/themerr-jellyfin.zip",
+                "checksum": "aace32dbe6b86ecf41d86b27dda52165",
+                "timestamp": "2024-01-13T15:46:11Z"
+            },
+            {
                 "version": "2024.113.351.4",
                 "changelog": "see LizardByte/Themerr-jellyfin on GitHub",
                 "targetAbi": "10.8.13.0",
