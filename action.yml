@@ -121,7 +121,7 @@ runs:
           ${{ steps.inputs.outputs.zipfile_path }}
 
     - name: Publish gh-pages
-      uses: actions-js/push@v1.4
+      uses: actions-js/push@v1.5
       with:
         github_token: ${{ inputs.github_token }}
         author_email: ${{ inputs.committer_email }}
