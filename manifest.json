@@ -14,8 +14,8 @@
                 "changelog": "see LizardByte/Themerr-jellyfin on GitHub",
                 "targetAbi": "10.9.1.0",
                 "sourceUrl": "https://github.com/LizardByte/Themerr-jellyfin/releases/download/v2024.518.1505.3/themerr-jellyfin.zip",
-                "checksum": "4a64acf1e47a658ee5172e8cb198fa63",
-                "timestamp": "2024-05-18T15:06:11Z"
+                "checksum": "703334b02b9760a49c8a79edc673e9fe",
+                "timestamp": "2024-05-18T18:26:36Z"
             },
             {
                 "version": "2024.515.2109.23",
