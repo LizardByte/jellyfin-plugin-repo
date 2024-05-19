@@ -3,6 +3,10 @@ name: "Jellyfin manifest manager"
 description: "Update a Jellyfin manifest file in a GitHub repository, and publish to gh-pages."
 author: "LizardByte"
 inputs:
+  action:
+    description: "The jprm action to perform. Choices are `add` or `remove`."
+    default: "add"
+    required: false
   committer_email:
     description: "The email address of the committer to the gh-pages branch."
     required: true
@@ -29,11 +33,11 @@ inputs:
     default: "LizardByte/jellyfin-plugin-repo"
     required: false
   plugin_url:
-    description: "The URL where the plugin zip file is (or will be) hosted. This will be evaluated if empty"
+    description: "The URL where the plugin zip file is (or will be) hosted. This will be evaluated if empty."
     default: ""
     required: false
   zipfile:
-    description: "The path to the plugin zip file. This will be evaluated if empty"
+    description: "The path to the plugin zip file. This will be evaluated if empty."
     default: ""
     required: false
 
@@ -44,13 +48,37 @@ runs:
       id: inputs
       shell: bash
       run: |
+        action=${{ inputs.action }}
         branch=${{ inputs.branch }}
         gh_pages_url=${{ inputs.gh_pages_url }}
         repository=${{ inputs.repository }}
         release_tag=${{ inputs.release_tag }}
 
+        # switch to ensure the action is valid
+        case $action in
+          add)
+            ;;
+          remove)
+            ;;
+          *)
+            echo ":error: Invalid action: $action"
+            echo "Valid actions are 'add' or 'remove'"
+            exit 1
+            ;;
+        esac
+
         # the repository running this action
         source_repository=${{ github.event.repository.name }}
+
+        if [[ "${{ github.event.repository }} =~ ^LizardByte/ ]]; then
+          # strip `-jellyfin` from the end of the name, if in the LizardByte org
+          plugin_name=$(echo $source_repository | sed 's/-jellyfin$//' | tr '[:upper:]' '[:lower:]')
+        else
+          plugin_name=$(echo $source_repository | tr '[:upper:]' '[:lower:]')
+        fi
+
+        # release version, tag without v prefix
+        release_version=$(echo $release_tag | sed 's/^v//')
 
         if [ -z "${{ inputs.zipfile }}" ]; then
           # repository name in lowercase
@@ -68,10 +96,12 @@ runs:
           plugin_url=${{ inputs.plugin_url }}
         fi
 
+        echo "action=${action}" >> $GITHUB_OUTPUT
         echo "branch=${branch}" >> $GITHUB_OUTPUT
         echo "gh_pages_url=${gh_pages_url}" >> $GITHUB_OUTPUT
         echo "repository=${repository}" >> $GITHUB_OUTPUT
         echo "release_tag=${release_tag}" >> $GITHUB_OUTPUT
+        echo "release_version=${release_version}" >> $GITHUB_OUTPUT
 
         echo "source_repository=${source_repository}" >> $GITHUB_OUTPUT
 
@@ -102,7 +132,7 @@ runs:
         persist-credentials: false  # otherwise, the token used is the GITHUB_TOKEN, instead of the personal token
         fetch-depth: 0  # otherwise, will fail to push refs to dest repo
 
-    - name: JPRM repo init/add
+    - name: JPRM repo
       shell: bash
       run: |
         # initialize repo if it doesn't exist
@@ -112,13 +142,22 @@ runs:
           ${{ steps.inputs.outputs.branch }} || true  # ignore error if already exists
 
         # add plugin to repo
-        ${{ steps.setup-python.outputs.python-path }} \
-          -m jprm \
-          repo add \
-          --url ${{ steps.inputs.outputs.gh_pages_url }} \
-          --plugin-url ${{ steps.inputs.outputs.plugin_url }} \
-          ${{ steps.inputs.outputs.branch }} \
-          ${{ steps.inputs.outputs.zipfile_path }}
+        if [ "${{ steps.inputs.outputs.action }}" == "add" ]; then
+          ${{ steps.setup-python.outputs.python-path }} \
+            -m jprm \
+            repo add \
+            --url ${{ steps.inputs.outputs.gh_pages_url }} \
+            --plugin-url ${{ steps.inputs.outputs.plugin_url }} \
+            ${{ steps.inputs.outputs.branch }} \
+            ${{ steps.inputs.outputs.zipfile_path }}
+        elif [ "${{ steps.inputs.outputs.action }}" == "remove" ]; then
+          ${{ steps.setup-python.outputs.python-path }} \
+            -m jprm \
+            repo remove \
+            ${{ steps.inputs.outputs.branch }} \
+            ${{ steps.inputs.outputs.plugin_name }} \
+            ${{ steps.inputs.outputs.release_version }}
+        fi
 
     - name: Publish gh-pages
       uses: actions-js/push@v1.5

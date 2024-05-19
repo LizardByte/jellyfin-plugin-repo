@@ -9,6 +9,10 @@ on:
     branches: [master]
   workflow_dispatch:
 
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
 jobs:
   release:
     name: Release
@@ -19,7 +23,7 @@ jobs:
 
       - name: Setup Release
         id: setup_release
-        uses: LizardByte/setup-release-action@v2024.511.154635
+        uses: LizardByte/setup-release-action@v2024.520.193857
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -27,14 +31,13 @@ jobs:
         if: >-
           (github.event_name == 'push' && github.ref == 'refs/heads/master') &&
           steps.setup_release.outputs.publish_release == 'true'
-        uses: LizardByte/create-release-action@v2024.511.153520
+        uses: LizardByte/create-release-action@v2024.520.193838
         with:
           allowUpdates: true
           artifacts: ""
-          body: ''
           discussionCategory: announcements
           generateReleaseNotes: true
           name: ${{ steps.setup_release.outputs.release_tag }}
-          prerelease: ${{ steps.setup_release.outputs.publish_pre_release }}
+          prerelease: true
           tag: ${{ steps.setup_release.outputs.release_tag }}
           token: ${{ secrets.GH_BOT_TOKEN }}
