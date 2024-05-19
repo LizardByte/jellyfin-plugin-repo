@@ -2,13 +2,21 @@
     {
         "guid": "e41ef0c4-c413-41ba-b4fa-8c565dc3c969",
         "name": "Themerr",
-        "description": "Automatically add theme songs to movies using ThemerrDB",
-        "overview": "Automatically add theme songs to movies using ThemerrDB",
+        "description": "Automatically add theme songs to movies and tv shows using ThemerrDB",
+        "overview": "Automatically add theme songs to movies and tv shows using ThemerrDB",
         "owner": "LizardByte",
         "category": "Metadata",
         "image": "themerr-jellyfin.png",
         "imageUrl": "https://lizardbyte.github.io/jellyfin-plugin-repo/themerr/themerr-jellyfin.png",
         "versions": [
+            {
+                "version": "2024.519.1512.33",
+                "changelog": "see LizardByte/Themerr-jellyfin on GitHub",
+                "targetAbi": "10.9.1.0",
+                "sourceUrl": "https://github.com/LizardByte/Themerr-jellyfin/releases/download/v2024.519.1512.33/themerr-jellyfin.zip",
+                "checksum": "d7ed00d15338e385b225e8a300e48e2e",
+                "timestamp": "2024-05-19T15:23:01Z"
+            },
             {
                 "version": "2024.518.2054.48",
                 "changelog": "see LizardByte/Themerr-jellyfin on GitHub",
