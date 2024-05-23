@@ -70,7 +70,7 @@ runs:
         # the repository running this action
         source_repository=${{ github.event.repository.name }}
 
-        if [[ "${{ github.event.repository }} =~ ^LizardByte/ ]]; then
+        if [[ "${{ github.event.repository }}" =~ ^LizardByte/ ]]; then
           # strip `-jellyfin` from the end of the name, if in the LizardByte org
           plugin_name=$(echo $source_repository | sed 's/-jellyfin$//' | tr '[:upper:]' '[:lower:]')
         else
