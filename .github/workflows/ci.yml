@@ -22,22 +22,23 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Release
-        id: setup_release
-        uses: LizardByte/setup-release-action@v2024.520.193857
+        id: setup-release
+        uses: LizardByte/setup-release-action@v2024.608.210128
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create/Update GitHub Release
         if: >-
           (github.event_name == 'push' && github.ref == 'refs/heads/master') &&
-          steps.setup_release.outputs.publish_release == 'true'
+          steps.setup-release.outputs.publish_release == 'true'
         uses: LizardByte/create-release-action@v2024.608.160245
         with:
           allowUpdates: true
-          artifacts: ""
+          artifacts: ''
+          body: ${{ steps.setup-release.outputs.release_body }}
           discussionCategory: announcements
-          generateReleaseNotes: true
-          name: ${{ steps.setup_release.outputs.release_tag }}
+          generateReleaseNotes: ${{ steps.setup-release.outputs.release_generate_release_notes }}
+          name: ${{ steps.setup-release.outputs.release_tag }}
           prerelease: true
-          tag: ${{ steps.setup_release.outputs.release_tag }}
+          tag: ${{ steps.setup-release.outputs.release_tag }}
           token: ${{ secrets.GH_BOT_TOKEN }}
