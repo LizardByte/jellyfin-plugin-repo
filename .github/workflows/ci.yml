@@ -1,12 +1,19 @@
 ---
 name: CI
+permissions:
+  contents: write  # needed for setup-release-action
 
 on:
   pull_request:
-    branches: [master]
-    types: [opened, synchronize, reopened]
+    branches:
+      - master
+    types:
+      - opened
+      - synchronize
+      - reopened
   push:
-    branches: [master]
+    branches:
+      - master
   workflow_dispatch:
 
 concurrency:
@@ -23,15 +30,13 @@ jobs:
 
       - name: Setup Release
         id: setup-release
-        uses: LizardByte/setup-release-action@v2024.919.143601
+        uses: LizardByte/setup-release-action@v2025.426.225
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create/Update GitHub Release
-        if: >-
-          (github.event_name == 'push' && github.ref == 'refs/heads/master') &&
-          steps.setup-release.outputs.publish_release == 'true'
-        uses: LizardByte/create-release-action@v2024.919.143026
+        if: steps.setup-release.outputs.publish_release == 'true'
+        uses: LizardByte/create-release-action@v2025.426.1549
         with:
           allowUpdates: true
           artifacts: ''
