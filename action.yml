@@ -124,7 +124,7 @@ runs:
         ${{ steps.setup-python.outputs.python-path }} -m pip install -r requirements.txt
 
     - name: Checkout gh-pages
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         ref: ${{ steps.inputs.outputs.branch }}
         repository: ${{ steps.inputs.outputs.repository }}
