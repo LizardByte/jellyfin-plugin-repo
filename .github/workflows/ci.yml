@@ -1,16 +1,9 @@
 ---
 name: CI
-permissions:
-  contents: write  # needed for setup-release-action
+permissions: {}
 
 on:
   pull_request:
-    branches:
-      - master
-    types:
-      - opened
-      - synchronize
-      - reopened
   push:
     branches:
       - master
@@ -24,25 +17,28 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # needed for release-setup action
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
 
       - name: Setup Release
-        id: setup-release
-        uses: LizardByte/setup-release-action@v2025.612.30126
+        id: release-setup
+        uses: LizardByte/actions/actions/release_setup@0affa4f7bcb27562658960eee840eff8ff844578  # v2026.328.161128
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create/Update GitHub Release
-        if: steps.setup-release.outputs.publish_release == 'true'
-        uses: LizardByte/create-release-action@v2025.612.13419
+        if: steps.release-setup.outputs.publish_release == 'true'
+        uses: LizardByte/actions/actions/release_create@0affa4f7bcb27562658960eee840eff8ff844578  # v2026.328.161128
         with:
-          allowUpdates: true
+          allowUpdates: false
           artifacts: ''
-          body: ${{ steps.setup-release.outputs.release_body }}
-          generateReleaseNotes: ${{ steps.setup-release.outputs.release_generate_release_notes }}
-          name: ${{ steps.setup-release.outputs.release_tag }}
+          body: ${{ steps.release-setup.outputs.release_body }}
+          draft: true
+          generateReleaseNotes: ${{ steps.release-setup.outputs.release_generate_release_notes }}
+          name: ${{ steps.release-setup.outputs.release_tag }}
           prerelease: true
-          tag: ${{ steps.setup-release.outputs.release_tag }}
+          tag: ${{ steps.release-setup.outputs.release_tag }}
           token: ${{ secrets.GH_BOT_TOKEN }}
