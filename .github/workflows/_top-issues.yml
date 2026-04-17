@@ -3,21 +3,25 @@
 # Don't make changes to this file in this repo as they will be overwritten with changes made to the same file in
 # the above-mentioned repo.
 
-name: common lint
+# Create a top issues dashboard
+
+name: Top issues
 permissions: {}
 
 on:
-  pull_request:
+  schedule:
+    - cron: '0 6/12 * * *'
+  workflow_dispatch:
 
 concurrency:
-  group: "${{ github.workflow }}-${{ github.ref }}"
+  group: 'top-issues'
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Common Lint
-    uses: LizardByte/.github/.github/workflows/__call-common-lint.yml@master
-    if: ${{ github.repository != 'LizardByte/.github' }}
+  top-issues:
+    name: Top issues
+    uses: LizardByte/.github/.github/workflows/__call-top-issues.yml@master
+    if: github.repository_owner == 'LizardByte'
     permissions:
       contents: read
-      pull-requests: read
+      issues: write
