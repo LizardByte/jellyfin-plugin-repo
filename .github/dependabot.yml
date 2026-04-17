@@ -3,76 +3,16 @@
 # Don't make changes to this file in this repo as they will be overwritten with changes made to the same file in
 # the above-mentioned repo.
 
+# All dependendencies, except git submodules, in this project are now managed by Renovate.
+# See https://github.com/LizardByte/.github/blob/master/renovate-config.json5 for configuration.
+
 version: 2
 updates:
-  - package-ecosystem: "cargo"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "07:30"
-    open-pull-requests-limit: 10
-
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "08:00"
-    open-pull-requests-limit: 10
-
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "08:30"
-    open-pull-requests-limit: 10
-    groups:
-      docker-actions:
-        applies-to: version-updates
-        patterns:
-          - "docker/*"
-      github-actions:
-        applies-to: version-updates
-        patterns:
-          - "actions/*"
-          - "github/*"
-      lizardbyte-actions:
-        applies-to: version-updates
-        patterns:
-          - "LizardByte/*"
-
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "09:00"
-    open-pull-requests-limit: 10
-    groups:
-      dev-dependencies:
-        applies-to: version-updates
-        dependency-type: "development"
-
-  - package-ecosystem: "nuget"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "09:30"
-    open-pull-requests-limit: 10
-
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "10:00"
-    open-pull-requests-limit: 10
-    groups:
-      pytest-dependencies:
-        applies-to: version-updates
-        patterns:
-          - "pytest*"
-
   - package-ecosystem: "gitsubmodule"
     directory: "/"
+    rebase-strategy: disabled
     schedule:
-      interval: "daily"
-      time: "10:30"
+      interval: "cron"
+      cronjob: "30 2 * * *"
+      timezone: "America/New_York"
     open-pull-requests-limit: 10
