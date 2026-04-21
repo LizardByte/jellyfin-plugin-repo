@@ -167,7 +167,7 @@ runs:
         fi
 
     - name: Publish gh-pages
-      uses: actions-js/push@5a7cbd780d82c0c937b5977586e641b2fd94acc5  # v1.5
+      uses: actions-js/push@156f2b10c3aa000c44dbe75ea7018f32ae999772  # v1.4
       with:
         github_token: ${{ inputs.github_token }}
         author_email: ${{ inputs.committer_email }}
