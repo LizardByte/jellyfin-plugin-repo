@@ -79,7 +79,7 @@ runs:
 
         if [[ "${SOURCE_REPOSITORY}" =~ ^LizardByte/ ]]; then
           # strip `-jellyfin` from the end of the name, if in the LizardByte org
-          plugin_name=$(echo ${SOURCE_REPOSITORY_NAME}} | sed 's/-jellyfin$//' | tr '[:upper:]' '[:lower:]')
+          plugin_name=$(echo ${SOURCE_REPOSITORY_NAME} | sed 's/-jellyfin$//' | tr '[:upper:]' '[:lower:]')
         else
           plugin_name=$(echo ${SOURCE_REPOSITORY_NAME} | tr '[:upper:]' '[:lower:]')
         fi
@@ -107,11 +107,12 @@ runs:
           echo "action=${INPUTS_ACTION}"
           echo "branch=${INPUTS_BRANCH}"
           echo "gh_pages_url=${INPUTS_GH_PAGES_URL}"
+          echo "plugin_name=${plugin_name}"
+          echo "plugin_url=${plugin_url}"
           echo "repository=${INPUTS_REPOSITORY}"
           echo "release_tag=${INPUTS_RELEASE_TAG}"
           echo "release_version=${release_version}"
           echo "source_repository=${SOURCE_REPOSITORY_NAME}"
-          echo "plugin_url=${plugin_url}"
           echo "zipfile_name=${zipfile_name}"
           echo "zipfile_path=${zipfile_path}"
         } >> "${GITHUB_OUTPUT}"
