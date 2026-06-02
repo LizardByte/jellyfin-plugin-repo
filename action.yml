@@ -60,7 +60,7 @@ runs:
         INPUTS_REPOSITORY: ${{ inputs.repository }}
         INPUTS_RELEASE_TAG: ${{ inputs.release_tag }}
         INPUTS_ZIPFILE: ${{ inputs.zipfile }}
-        SOURCE_REPOSITORY: ${{ github.event.repository }}
+        SOURCE_REPOSITORY: ${{ github.event.repository.full_name }}
         SOURCE_REPOSITORY_NAME: ${{ github.event.repository.name }}  # the repository running this action
         SOURCE_REPOSITORY_URL: ${{ github.event.repository.html_url }}
       run: |
