@@ -1,4 +1,18 @@
-# jellyfin-plugin-repo
+<div align="center">
+  <img
+    src="https://raw.githubusercontent.com/LizardByte/.github/refs/heads/master/branding/logos/logo.svg"
+    alt="LizardByte icon"
+    width="256"
+  />
+  <h1 align="center">jellyfin-plugin-repo</h1>
+  <h4 align="center">Manifest for LizardByte's Jellyfin plugins.</h4>
+</div>
+
+<div align="center">
+  <a href="https://sonarcloud.io/project/overview?id=LizardByte_jellyfin-plugin-repo"><img src="https://img.shields.io/sonar/quality_gate/LizardByte_jellyfin-plugin-repo.svg?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqubecloud&label=sonarcloud" alt="SonarCloud"></a>
+</div>
+
+## Overview
 
 This repository hosts LizardByte's Jellyfin plugins in gh-pages. Additionally, there is a re-usable GitHub action
 that can be used to publish your own plugins to your own gh-pages repository. See [action.yml](action.yml) for details.
