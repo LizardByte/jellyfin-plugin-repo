@@ -71,8 +71,8 @@ runs:
           remove)
             ;;
           *)
-            echo ":error: Invalid action: ${INPUTS_ACTION}"
-            echo "Valid actions are 'add' or 'remove'"
+            echo ":error: Invalid action: ${INPUTS_ACTION}" >&2
+            echo "Valid actions are 'add' or 'remove'" >&2
             exit 1
             ;;
         esac
